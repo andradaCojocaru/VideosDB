@@ -15,4 +15,7 @@ public class MyVideo {
         this.cast = cast;
         this.genres = genres;
     }
+
+    public MyVideo() {
+    }
 }

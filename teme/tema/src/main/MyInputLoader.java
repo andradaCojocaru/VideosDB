@@ -1,5 +1,6 @@
 package main;
 
+import entertainment.Season;
 import fileio.*;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class MyInputLoader {
     List<MyUser> usersData;
     List<ActionInputData> commandsData;
     List<MyMovie> moviesData;
-    List<SerialInputData> serialsData;
+    List<MySerial> serialsData;
 
     public MyInputLoader(Input input) {
         actorsData = new ArrayList<>(input.getActors());
@@ -30,6 +31,18 @@ public class MyInputLoader {
                     movie.getCast(), movie.getGenres(), movie.getDuration(),
                     ratings));
         }
-        serialsData = new ArrayList<>(input.getSerials());
+        List<SerialInputData> serials = new ArrayList<>(input.getSerials());
+        serialsData = new ArrayList<>();
+        for (SerialInputData serial : serials) {
+            ArrayList<MySeason> seasons = new ArrayList<>();
+            int i = 0;
+            for (Season season : serial.getSeasons()) {
+                i += 1;
+                seasons.add(new MySeason(i, season.getDuration()));
+            }
+            serialsData.add(new MySerial(serial.getTitle(), serial.getCast(),
+                    serial.getGenres(), serial.getNumberSeason(),
+                    seasons, serial.getYear()));
+        }
     }
 }

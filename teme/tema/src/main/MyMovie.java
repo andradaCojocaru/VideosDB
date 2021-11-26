@@ -6,6 +6,10 @@ public class MyMovie extends MyVideo {
     int duration;
     ArrayList<Double> ratings;
 
+    public MyMovie() {
+
+    }
+
     public MyMovie(String title, int year, ArrayList<String> cast,
             ArrayList<String> genres, int duration,
             ArrayList<Double> ratings) {

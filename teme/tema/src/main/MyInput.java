@@ -9,7 +9,7 @@ public class MyInput {
     List<MyUser> usersData;
     List<ActionInputData> commandsData;
     List<MyMovie> moviesData;
-    List<SerialInputData> serialsData;
+    List<MySerial> serialsData;
 
     public MyInput() {
         this.actorsData = null;
@@ -21,7 +21,7 @@ public class MyInput {
 
     public MyInput(List<ActorInputData> actors, List<MyUser> users,
                  List<ActionInputData> commands, List<MyMovie> movies,
-                 List<SerialInputData> serials) {
+                 List<MySerial> serials) {
         this.actorsData = actors;
         this.usersData = users;
         this.commandsData = commands;
@@ -45,7 +45,7 @@ public class MyInput {
         return moviesData;
     }
 
-    public List<SerialInputData> getSerials() {
+    public List<MySerial> getSerials() {
         return serialsData;
     }
 }
