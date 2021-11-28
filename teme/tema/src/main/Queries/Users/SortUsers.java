@@ -15,8 +15,10 @@ public class SortUsers {
     public void SortNumberOfRatings(String ordonation) {
         if (ordonation.equals("asc")) {
             cmp = (o1, o2) -> Integer.compare(o1.getNumberOfRatings(), o2.getNumberOfRatings());
+            cmp = cmp.thenComparing((o1, o2) -> o1.getUsername().compareTo(o2.getUsername()));
         } else {
             cmp = (o2, o1) -> Integer.compare(o1.getNumberOfRatings(), o2.getNumberOfRatings());
+            cmp = cmp.thenComparing((o2, o1) -> o1.getUsername().compareTo(o2.getUsername()));
         }
     }
 

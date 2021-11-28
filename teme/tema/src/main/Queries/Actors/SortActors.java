@@ -16,7 +16,7 @@ public class SortActors {
             cmp = cmp.thenComparing((o1, o2) -> o1.getName().compareTo(o2.getName()));
         } else {
             cmp = (o2, o1) -> Double.compare(o1.getAverage(), o2.getAverage());
-            cmp = cmp.thenComparing((o1, o2) -> o1.getName().compareTo(o2.getName()));
+            cmp = cmp.thenComparing((o2, o1) -> o1.getName().compareTo(o2.getName()));
         }
     }
 
@@ -26,15 +26,17 @@ public class SortActors {
             cmp = cmp.thenComparing((o1, o2) -> o1.getName().compareTo(o2.getName()));
         } else {
             cmp = (o2, o1) -> Integer.compare(o1.getNumberOfAwards(), o2.getNumberOfAwards());
-            cmp = cmp.thenComparing((o1, o2) -> o1.getName().compareTo(o2.getName()));
+            cmp = cmp.thenComparing((o2, o1) -> o1.getName().compareTo(o2.getName()));
         }
     }
 
     public void SortFilters(String ordonation) {
         if (ordonation.equals("asc")) {
             cmp = (o1, o2) -> o1.getName().compareTo(o2.getName());
+            cmp = cmp.thenComparing((o1, o2) -> o1.getName().compareTo(o2.getName()));
         } else {
             cmp = (o2, o1) -> o1.getName().compareTo(o2.getName());
+            cmp = cmp.thenComparing((o2, o1) -> o1.getName().compareTo(o2.getName()));
         }
     }
 

@@ -10,10 +10,7 @@ import fileio.Writer;
 import main.Commands.Favorite;
 import main.Commands.Rating;
 import main.Commands.View;
-import main.Entities.MyActor;
-import main.Entities.MyMovie;
-import main.Entities.MySerial;
-import main.Entities.MyUser;
+import main.Entities.*;
 import main.Get.*;
 import main.Queries.Actors.SortActors;
 import main.Queries.Users.SortUsers;
@@ -287,12 +284,45 @@ public final class Main {
                     sort.SortNumberOfRatings(command.getSortType());
                     message = sort.mySort(copyUsers, command.getNumber());
                 }
+            } else if (actionType.equals("recommendation")) {
+                String action = new String();
+                action = command.getType();
+                String usernamer = new String();
+                usernamer = command.getUsername();
+                MyUser newUserr = new MyUser();
+                for (MyUser user : myInput.getUsersData()) {
+                    if (user.getUsername().equals(usernamer)) {
+                        newUserr = user;
+                        break;
+                    }
+                }
+                if (action.equals("standard")) {
+                    GetVideoNotSeen getVideoNotSeen = new GetVideoNotSeen();
+                    String recommendation = getVideoNotSeen.standard(newUserr, myInputLoader.getMoviesData(), myInputLoader.getSerialsData());
+                    if (recommendation != " ") {
+                        message = "StandardRecommendation result: " + recommendation;
+                    } else {
+                        message = "StandardRecommendation cannot be applied!";
+                    }
+                } else if (action.equals("best_unseen")) {
+                    RatingVideo ratingVideo = new RatingVideo();
+                    ArrayList<MyVideo> newVideos = new ArrayList<>();
+                    ArrayList<MySerial> newSerials = new ArrayList<>();
+                    for (MyMovie movie : myInput.getMoviesData()) {
+                        ratingVideo.myRating(movie);
+                        newVideos.add(movie);
+                    }
+                    for (MySerial serial : myInput.getSerialsData()) {
+                        ratingVideo.myRating(serial);
+                        newSerials.add(serial);
+                    }
+
+                }
             }
-                arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                        message));
+            arrayResult.add(fileWriter.writeFile(command.getActionId(),
+                    message));
         }
 
-            fileWriter.closeJSON(arrayResult);
+        fileWriter.closeJSON(arrayResult);
     }
 }
-

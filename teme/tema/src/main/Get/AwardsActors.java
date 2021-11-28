@@ -1,9 +1,11 @@
 package main.Get;
 
+import actor.ActorsAwards;
 import main.Entities.MyActor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AwardsActors {
     public AwardsActors() {
@@ -15,14 +17,16 @@ public class AwardsActors {
             int sum = 0;
             int ok = 0;
             for (int i = 0; i < awards.size(); i++) {
-                if (actor.getAwards().containsKey(awards.get(i))) {
-                    sum += actor.getAwards().get(awards.get(i));
-                    ok = 1;
+                ok = 0;
+                for (Map.Entry<ActorsAwards, Integer> entry : actor.getAwards().entrySet()) {
+                    if (((entry.getKey()).toString()).equals(awards.get(i))) {
+                        sum += entry.getValue();
+                        ok = 1;
+                    }
                 }
                 if (ok == 0) {
                     break;
                 }
-                ok = 0;
             }
             if (ok == 1) {
                 actor.setNumberOfAwards(sum);
