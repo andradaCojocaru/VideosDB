@@ -1,16 +1,28 @@
 package main;
 
-import fileio.*;
+import fileio.ActionInputData;
+import main.Entities.MyActor;
+import main.Entities.MyMovie;
+import main.Entities.MySerial;
+import main.Entities.MyUser;
 
 import java.util.List;
 
 public class MyInput {
-    List<ActorInputData> actorsData;
-    List<MyUser> usersData;
-    List<ActionInputData> commandsData;
-    List<MyMovie> moviesData;
-    List<MySerial> serialsData;
+    @lombok.Getter
+    private List<MyActor> actorsData;
+    @lombok.Getter
+    private List<MyUser> usersData;
+    @lombok.Getter
+    private List<ActionInputData> commandsData;
+    @lombok.Getter
+    private List<MyMovie> moviesData;
+    @lombok.Getter
+    private List<MySerial> serialsData;
 
+    /**
+     * class for MyInput
+     */
     public MyInput() {
         this.actorsData = null;
         this.usersData = null;
@@ -19,33 +31,21 @@ public class MyInput {
         this.serialsData = null;
     }
 
-    public MyInput(List<ActorInputData> actors, List<MyUser> users,
-                 List<ActionInputData> commands, List<MyMovie> movies,
-                 List<MySerial> serials) {
+    /**
+     * @param actors
+     * @param users
+     * @param commands
+     * @param movies
+     * @param serials
+     */
+    public MyInput(final List<MyActor> actors, final List<MyUser> users,
+                 final List<ActionInputData> commands, final List<MyMovie> movies,
+                 final List<MySerial> serials) {
         this.actorsData = actors;
         this.usersData = users;
         this.commandsData = commands;
         this.moviesData = movies;
         this.serialsData = serials;
     }
-
-    public List<ActorInputData> getActors() {
-        return actorsData;
-    }
-
-    public List<MyUser> getUsers() {
-        return usersData;
-    }
-
-    public List<ActionInputData> getCommands() {
-        return commandsData;
-    }
-
-    public List<MyMovie> getMovies() {
-        return moviesData;
-    }
-
-    public List<MySerial> getSerials() {
-        return serialsData;
-    }
 }
+
