@@ -83,7 +83,7 @@ public class Rating {
         if (success == 1) {
             if (user.getRated() != null) {
                 for (String name : user.getRated()) {
-                    if ((name + seasonNumber).equals(serial.getTitle())) {
+                    if (name.equals((serial.getTitle() + seasonNumber))) {
                         return "error -> " + serial.getTitle() + " has been already rated";
                     }
                 }

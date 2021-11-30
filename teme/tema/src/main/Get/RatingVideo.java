@@ -13,7 +13,7 @@ public class RatingVideo {
             int n;
             sum = 0;
             n = 0;
-            for (Double rating : movie.getRatings()) {
+            for (double rating : movie.getRatings()) {
                 sum += rating;
                 n += 1;
             }

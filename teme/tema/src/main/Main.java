@@ -3,6 +3,7 @@ package main;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
+import entertainment.Genre;
 import fileio.ActionInputData;
 import fileio.Input;
 import fileio.InputLoader;
@@ -10,12 +11,27 @@ import fileio.Writer;
 import main.Commands.Favorite;
 import main.Commands.Rating;
 import main.Commands.View;
-import main.Entities.*;
-import main.Get.*;
+import main.Entities.MyActor;
+import main.Entities.MyGenre;
+import main.Entities.MyMovie;
+import main.Entities.MySerial;
+import main.Entities.MyUser;
+import main.Entities.MyVideo;
+import main.Get.AwardsActors;
+import main.Get.FilterActors;
+import main.Get.GetFavorite;
+import main.Get.GetVideoFilters;
+import main.Get.GetVideoNotSeen;
+import main.Get.GetViews;
+import main.Get.RatingActors;
+import main.Get.RatingVideo;
+import main.Get.TimeSerial;
 import main.Queries.Actors.SortActors;
 import main.Queries.Users.SortUsers;
 import main.Queries.Videos.SortMovie;
 import main.Queries.Videos.SortSerial;
+import main.Recommendations.SortGenre;
+import main.Recommendations.SortVideo;
 import org.json.simple.JSONArray;
 
 import java.io.File;
@@ -206,15 +222,13 @@ public final class Main {
                         if (criteria.equals("ratings")) {
                             RatingVideo ratingVideo = new RatingVideo();
                             for (MySerial serial : copySerials) {
-                                ratingVideo.myRating(serial);
+                                serial.setRating(ratingVideo.myRating(serial));
                             }
                             SortSerial sort = new SortSerial();
+                            copySerials.removeIf((v) -> v.getRating() == 0);
                             sort.SortRating(command.getSortType());
-                            if (copySerials.size() >= command.getNumber() && copySerials.size() > 1) {
-                                message = sort.mySort(copySerials, command.getNumber());
-                            } else {
-                                message = "Query result: []";
-                            }
+                            message = sort.mySort(copySerials, command.getNumber());
+
                         } else if (criteria.equals("favorite")) {
                             GetFavorite getFavorite = new GetFavorite();
                             getFavorite.numberFavoritesSerial(myInput.getUsersData(), copySerials);
@@ -245,15 +259,12 @@ public final class Main {
                         if (criteria.equals("ratings")) {
                             RatingVideo ratingVideo = new RatingVideo();
                             for (MyMovie movie : copyMovies) {
-                                ratingVideo.myRating(movie);
+                                movie.setRating(ratingVideo.myRating(movie));
                             }
                             SortMovie sort = new SortMovie();
+                            copyMovies.removeIf((v) -> v.getRating() == 0);
                             sort.SortRating(command.getSortType());
-                            if (copyMovies.size() >= command.getNumber() && copyMovies.size() > 1) {
-                                message = sort.mySort(copyMovies, command.getNumber());
-                            } else {
-                                message = "Query result: []";
-                            }
+                            message = sort.mySort(copyMovies, command.getNumber());
                         } else if (criteria.equals("favorite")) {
                             GetFavorite getFavorite = new GetFavorite();
                             getFavorite.numberFavoritesMovie(myInput.getUsersData(), copyMovies);
@@ -290,33 +301,199 @@ public final class Main {
                 String usernamer = new String();
                 usernamer = command.getUsername();
                 MyUser newUserr = new MyUser();
+                int ok = 0;
                 for (MyUser user : myInput.getUsersData()) {
                     if (user.getUsername().equals(usernamer)) {
                         newUserr = user;
+                        ok = 1;
                         break;
                     }
                 }
-                if (action.equals("standard")) {
-                    GetVideoNotSeen getVideoNotSeen = new GetVideoNotSeen();
-                    String recommendation = getVideoNotSeen.standard(newUserr, myInputLoader.getMoviesData(), myInputLoader.getSerialsData());
-                    if (recommendation != " ") {
-                        message = "StandardRecommendation result: " + recommendation;
-                    } else {
+                if (ok == 1) {
+                    if (action.equals("standard")) {
+                        GetVideoNotSeen getVideoNotSeen = new GetVideoNotSeen();
+                        String recommendation = getVideoNotSeen.standard(newUserr, myInputLoader.getMoviesData(), myInputLoader.getSerialsData());
+                        if (recommendation != " ") {
+                            message = "StandardRecommendation result: " + recommendation;
+                        } else {
+                            message = "StandardRecommendation cannot be applied!";
+                        }
+                    } else if (action.equals("best_unseen")) {
+                        RatingVideo ratingVideo = new RatingVideo();
+                        ArrayList<MyVideo> newVideosRating = new ArrayList<>();
+                        ArrayList<MyVideo> newVideos = new ArrayList<>();
+                        SortVideo sortVideo = new SortVideo();
+                        sortVideo.SortRating();
+                        String recommendation = new String();
+                        recommendation = " ";
+                        for (MyMovie movie : myInput.getMoviesData()) {
+                            movie.setRating(ratingVideo.myRating(movie));
+                            newVideos.add(movie);
+                            if (movie.getRating() != 0) {
+                                newVideosRating.add(movie);
+                            }
+                        }
+                        for (MySerial serial : myInput.getSerialsData()) {
+                            serial.setRating(ratingVideo.myRating(serial));
+                            newVideos.add(serial);
+                            if (serial.getRating() != 0) {
+                                newVideosRating.add(serial);
+                            }
+                        }
+                        sortVideo.mySort(newVideosRating);
+                        for (MyVideo video : newVideosRating) {
+                            if (newUserr.getHistory().containsKey(video.getTitle()) == false) {
+                                recommendation = video.getTitle();
+                                break;
+                            }
+                        }
+                        if (recommendation == " ") {
+                            for (MyVideo video : newVideos) {
+                                if (newUserr.getHistory().containsKey(video.getTitle()) == false) {
+                                    recommendation = video.getTitle();
+                                    break;
+                                }
+                            }
+                        }
+                        if (recommendation != " ") {
+                            message = "BestRatedUnseenRecommendation result: " + recommendation;
+                        } else {
+                            message = "BestRatedUnseenRecommendation cannot be applied!";
+                        }
+                    } else if (action.equals("popular")) {
+                        if (newUserr.getSubscriptionType().equals("PREMIUM") == false) {
+                            message = "PopularRecommendation cannot be applied!";
+                        } else {
+                            String recommendation = new String();
+                            recommendation = " ";
+                            ArrayList<MyVideo> newVideosViews = new ArrayList<>();
+                            GetViews getViews = new GetViews();
+                            getViews.numberViewsMovie(myInput.getUsersData(), myInput.getMoviesData());
+                            for (MyMovie movie : myInput.getMoviesData()) {
+                                newVideosViews.add(movie);
+                            }
+                            getViews.numberViewsSerial(myInput.getUsersData(), myInput.getSerialsData());
+                            for (MySerial serial : myInput.getSerialsData()) {
+                                newVideosViews.add(serial);
+                            }
+                            int i = 0;
+                            List<MyGenre> newGenre = new ArrayList<>();
+                            for (Genre genre : Genre.values()) {
+                                MyGenre myGenre = new MyGenre(genre.name(), null, 0);
+                                newGenre.add(myGenre);
+                                ArrayList<MyVideo> videos = new ArrayList<>();
+                                int numberOfViews = 0;
+                                for (MyVideo video : newVideosViews) {
+                                    for (String genreVideoName : video.getGenres()) {
+                                        if (genreVideoName.equalsIgnoreCase(genre.name())) {
+                                            numberOfViews += video.getNumberOfViews();
+                                            videos.add(video);
+                                        }
+                                    }
+                                }
+                                newGenre.get(i).setNumberOfViews(numberOfViews);
+                                newGenre.get(i).setVideos(videos);
+                                i++;
+                            }
+                            SortGenre sortGenre = new SortGenre();
+                            sortGenre.Sort();
+                            sortGenre.mySort(newGenre);
+                            newGenre.removeIf((v) -> v.getNumberOfViews() == 0);
+                            for (MyGenre genre : newGenre) {
+                                for (MyVideo video : genre.getVideos()) {
+                                    if (newUserr.getHistory().containsKey(video.getTitle()) == false && video.getNumberOfViews() != 0) {
+                                        recommendation = video.getTitle();
+                                        break;
+                                    }
+                                }
+                            }
+                            if (recommendation != " ") {
+                                message = "PopularRecommendation result: " + recommendation;
+                            } else {
+                                message = "PopularRecommendation cannot be applied!";
+                            }
+                        }
+                    } else if (action.equals("favorite")) {
+                        if (newUserr.getSubscriptionType().equals("PREMIUM") == false) {
+                            message = "FavoriteRecommendation cannot be applied!";
+                        } else {
+                            String recommendation = new String();
+                            recommendation = " ";
+                            ArrayList<MyVideo> newVideosFavorite = new ArrayList<>();
+                            GetFavorite getFavorite = new GetFavorite();
+                            getFavorite.numberFavoritesMovie(myInput.getUsersData(), myInput.getMoviesData());
+                            for (MyMovie movie : myInput.getMoviesData()) {
+                                if (movie.getNumberOfFavorites() != 0) {
+                                    newVideosFavorite.add(movie);
+                                }
+                            }
+                            getFavorite.numberFavoritesSerial(myInput.getUsersData(), myInput.getSerialsData());
+                            for (MySerial serial : myInput.getSerialsData()) {
+                                if (serial.getNumberOfFavorites() != 0) {
+                                    newVideosFavorite.add(serial);
+                                }
+                            }
+                            SortVideo sortVideo = new SortVideo();
+                            sortVideo.SortFavorite();
+                            sortVideo.mySort(newVideosFavorite);
+                            for (MyVideo video : newVideosFavorite) {
+                                if (newUserr.getHistory().containsKey(video.getTitle()) == false) {
+                                    recommendation = video.getTitle();
+                                    break;
+                                }
+                            }
+                            if (recommendation != " ") {
+                                message = "FavoriteRecommendation result: " + recommendation;
+                            } else {
+                                message = "FavoriteRecommendation cannot be applied!";
+                            }
+                        }
+                    } else if (action.equals("search")) {
+                        if (newUserr.getSubscriptionType().equals("PREMIUM") == false) {
+                            message = "SearchRecommendation cannot be applied!";
+                        } else {
+                            String genre = new String();
+                            genre = command.getGenre();
+                            final String getGendre = genre;
+                            RatingVideo ratingVideo = new RatingVideo();
+                            ArrayList<MyVideo> videoSearch = new ArrayList<>();
+                            for (MyMovie movie : myInput.getMoviesData()) {
+                                movie.setRating(ratingVideo.myRating(movie));
+                                videoSearch.add(movie);
+                            }
+                            for (MySerial serial : myInput.getSerialsData()) {
+                                serial.setRating(ratingVideo.myRating(serial));
+                                videoSearch.add(serial);
+                            }
+                            videoSearch.removeIf((v) -> !v.getGenres().contains(getGendre));
+                            ArrayList<String> recommendation = new ArrayList<>();
+                            SortVideo sortVideo = new SortVideo();
+                            sortVideo.SortSearch();
+                            sortVideo.mySort(videoSearch);
+                            for (MyVideo video : videoSearch) {
+                                if (newUserr.getHistory().containsKey(video.getTitle()) == false) {
+                                    recommendation.add(video.getTitle());
+                                }
+                            }
+                            if (recommendation.size() != 0) {
+                                message = "SearchRecommendation result: " + recommendation;
+                            } else {
+                                message = "SearchRecommendation cannot be applied!";
+                            }
+                        }
+                    }
+                } else {
+                    if (action.equals("standard")) {
                         message = "StandardRecommendation cannot be applied!";
+                    } else if (action.equals("best_unseen")) {
+                        message = "BestRatedUnseenRecommendation cannot be applied!";
+                    } else if (action.equals("popular")) {
+                        message = "PopularRecommendation cannot be applied!";
+                    } else if (action.equals("favorite")) {
+                        message = "FavoriteRecommendation cannot be applied!";
+                    } else if (action.equals("search")) {
+                        message = "SearchRecommendation cannot be applied!";
                     }
-                } else if (action.equals("best_unseen")) {
-                    RatingVideo ratingVideo = new RatingVideo();
-                    ArrayList<MyVideo> newVideos = new ArrayList<>();
-                    ArrayList<MySerial> newSerials = new ArrayList<>();
-                    for (MyMovie movie : myInput.getMoviesData()) {
-                        ratingVideo.myRating(movie);
-                        newVideos.add(movie);
-                    }
-                    for (MySerial serial : myInput.getSerialsData()) {
-                        ratingVideo.myRating(serial);
-                        newSerials.add(serial);
-                    }
-
                 }
             }
             arrayResult.add(fileWriter.writeFile(command.getActionId(),
@@ -325,4 +502,5 @@ public final class Main {
 
         fileWriter.closeJSON(arrayResult);
     }
+
 }

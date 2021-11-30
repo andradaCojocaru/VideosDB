@@ -4,15 +4,24 @@ import main.Entities.MyMovie;
 import main.Entities.MySerial;
 import main.Entities.MyUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class that sets number of appearences in Favorite list
+ */
 public class GetFavorite {
+    /**
+     * new GetFavorite class
+     */
     public GetFavorite() {
 
     }
 
-    public void numberFavoritesMovie(List<MyUser> users, List<MyMovie> movies) {
+    /**
+     * @param users
+     * @param movies
+     */
+    public void numberFavoritesMovie(final List<MyUser> users, final List<MyMovie> movies) {
         for (MyUser user : users) {
             for (String movie : user.getFavoriteMovies()) {
                 for (MyMovie movieList : movies) {
@@ -26,7 +35,11 @@ public class GetFavorite {
         }
     }
 
-    public void numberFavoritesSerial(List<MyUser> users, List<MySerial> serials) {
+    /**
+     * @param users
+     * @param serials
+     */
+    public void numberFavoritesSerial(final List<MyUser> users, final List<MySerial> serials) {
         for (MyUser user : users) {
             for (String serial : user.getFavoriteMovies()) {
                 for (MySerial serialList : serials) {

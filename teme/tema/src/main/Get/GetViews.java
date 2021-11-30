@@ -6,11 +6,23 @@ import main.Entities.MyUser;
 
 import java.util.List;
 
+/**
+ * class that sets number of vies
+ */
 public class GetViews {
-    public GetViews () {
+    /**
+     * new class GetViews
+     */
+    public GetViews() {
 
     }
-    public void numberViewsMovie(List<MyUser> users, List<MyMovie> movies) {
+
+    /**
+     * @param users
+     * @param movies
+     */
+    public void numberViewsMovie(final List<MyUser> users,
+                                 final List<MyMovie> movies) {
         for (MyUser user : users) {
             for (MyMovie movie : movies) {
                 int sum;
@@ -26,7 +38,12 @@ public class GetViews {
         }
     }
 
-    public void numberViewsSerial(List<MyUser> users, List<MySerial> serials) {
+    /**
+     * @param users
+     * @param serials
+     */
+    public void numberViewsSerial(final List<MyUser> users,
+                                  final List<MySerial> serials) {
         for (MyUser user : users) {
             for (MySerial serial : serials) {
                 int sum;

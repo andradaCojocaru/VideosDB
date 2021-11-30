@@ -6,12 +6,27 @@ import main.Entities.MySerial;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class that filteres Videos
+ */
 public class GetVideoFilters {
+    /**
+     * new GetVideoFilters class
+     */
     public GetVideoFilters() {
     }
-    public ArrayList<MySerial> serialFilteres (List<MySerial> serials,
-                                               int filterOne, int filterTwo,
-                                               String year, String genre) {
+
+    /**
+     * @param serials
+     * @param filterOne
+     * @param filterTwo
+     * @param year
+     * @param genre
+     * @return
+     */
+    public ArrayList<MySerial> serialFilteres(final List<MySerial> serials,
+                                               final int filterOne, final int filterTwo,
+                                               final String year, final String genre) {
         ArrayList<MySerial> copySerials = new ArrayList<>();
         for (MySerial serial : serials) {
             int ok1;
@@ -40,9 +55,19 @@ public class GetVideoFilters {
         return copySerials;
     }
 
-    public ArrayList<MyMovie> movieFilteres (List<MyMovie> movies,
-                                               int filterOne, int filterTwo,
-                                               String year, String genre) {
+    /**
+     * @param movies
+     * @param filterOne
+     * @param filterTwo
+     * @param year
+     * @param genre
+     * @return
+     */
+    public ArrayList<MyMovie> movieFilteres(final List<MyMovie> movies,
+                                            final int filterOne,
+                                            final int filterTwo,
+                                            final String year,
+                                            final String genre) {
         ArrayList<MyMovie> copyMovies = new ArrayList<>();
         for (MyMovie movie : movies) {
             int ok1;
