@@ -1,18 +1,26 @@
 package main.Queries.Videos;
 
-import main.Entities.MyActor;
-import main.Entities.MyMovie;
 import main.Entities.MySerial;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * class for sort serial
+ */
 public class SortSerial {
+    /**
+     * new class SortSerial
+     */
     public SortSerial() {
 
     }
-    Comparator<MySerial> cmp;
-    public void SortRating(String ordonation) {
+    private Comparator<MySerial> cmp;
+
+    /**
+     * @param ordonation
+     */
+    public void sortRating(final String ordonation) {
         if (ordonation.equals("asc")) {
             cmp = (o1, o2) -> Double.compare(o1.getRating(), o2.getRating());
             cmp = cmp.thenComparing((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
@@ -22,7 +30,10 @@ public class SortSerial {
         }
     }
 
-    public void sortFavorites(String ordonation) {
+    /**
+     * @param ordonation
+     */
+    public void sortFavorites(final String ordonation) {
         if (ordonation.equals("asc")) {
             cmp = (o1, o2) -> Integer.compare(o1.getNumberOfFavorites(), o2.getNumberOfFavorites());
             cmp = cmp.thenComparing((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
@@ -32,7 +43,10 @@ public class SortSerial {
         }
     }
 
-    public void Longest(String ordonation) {
+    /**
+     * @param ordonation
+     */
+    public void longest(final String ordonation) {
         if (ordonation.equals("asc")) {
             cmp = (o1, o2) -> Integer.compare(o1.getTimeSum(), o2.getTimeSum());
             cmp = cmp.thenComparing((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
@@ -42,7 +56,10 @@ public class SortSerial {
         }
     }
 
-    public void mostViewed(String ordonation) {
+    /**
+     * @param ordonation
+     */
+    public void mostViewed(final String ordonation) {
         if (ordonation.equals("asc")) {
             cmp = (o1, o2) -> Integer.compare(o1.getNumberOfViews(), o2.getNumberOfViews());
             cmp = cmp.thenComparing((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
@@ -52,7 +69,12 @@ public class SortSerial {
         }
     }
 
-    public String mySort (ArrayList<MySerial> serials, int number) {
+    /**
+     * @param serials
+     * @param number
+     * @return
+     */
+    public String mySort(final ArrayList<MySerial> serials, int number) {
         ArrayList<String> names = new ArrayList<>();
 
         serials.sort(cmp);

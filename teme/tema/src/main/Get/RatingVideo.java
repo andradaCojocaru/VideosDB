@@ -6,8 +6,15 @@ import main.Entities.MySerial;
 
 import java.util.ArrayList;
 
+/**
+ * class for rating video
+ */
 public class RatingVideo {
-    public double myRating(MyMovie movie) {
+    /**
+     * @param movie
+     * @return
+     */
+    public double myRating(final MyMovie movie) {
         if (movie.getNumberOfRatings() != 0) {
             double sum;
             int n;
@@ -22,7 +29,11 @@ public class RatingVideo {
         return 0;
     }
 
-    public double myRating(MySerial serial) {
+    /**
+     * @param serial
+     * @return
+     */
+    public double myRating(final MySerial serial) {
         if (serial.getNumberOfRatings() != 0) {
             ArrayList<Double> ratings = new ArrayList<>();
             for (MySeason season : serial.getSeasons()) {

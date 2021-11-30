@@ -3,14 +3,23 @@ package main.Get;
 import main.Entities.MySeason;
 import main.Entities.MySerial;
 
-import java.io.Serial;
 import java.util.List;
 
+/**
+ * class for sum of time serial
+ */
 public class TimeSerial {
+    /**
+     * new class TimeSerial
+     */
     public TimeSerial() {
 
     }
-    public void getTimeSerial(List<MySerial> serials) {
+
+    /**
+     * @param serials
+     */
+    public void getTimeSerial(final List<MySerial> serials) {
         for (MySerial serial : serials) {
             int sum;
             sum = 0;

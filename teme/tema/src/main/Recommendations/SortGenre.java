@@ -1,22 +1,32 @@
 package main.Recommendations;
 
 import main.Entities.MyGenre;
-import main.Entities.MyVideo;
-
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * class for sort genre
+ */
 public class SortGenre {
+    /**
+     * new class SortGenre
+     */
     public SortGenre() {
 
     }
-    Comparator<MyGenre> cmp;
-    public void Sort() {
+    private Comparator<MyGenre> cmp;
+
+    /**
+     *
+     */
+    public void sort() {
         cmp = (o2, o1) -> Integer.compare(o1.getNumberOfViews(), o2.getNumberOfViews());
     }
 
-    public void mySort (List<MyGenre> genres) {
+    /**
+     * @param genres
+     */
+    public void mySort(final List<MyGenre> genres) {
         genres.sort(cmp);
     }
 }
