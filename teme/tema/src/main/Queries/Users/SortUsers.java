@@ -35,14 +35,15 @@ public class SortUsers {
      * @param number
      * @return
      */
-    public String mySort(final ArrayList<MyUser> users, int number) {
+    public String mySort(final ArrayList<MyUser> users, final int number) {
         ArrayList<String> names = new ArrayList<>();
 
         users.sort(cmp);
+        int i = number;
         for (MyUser user : users) {
-            if (number != 0) {
+            if (i != 0) {
                 names.add(user.getUsername());
-                number -= 1;
+                i -= 1;
             } else {
                 break;
             }

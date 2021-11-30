@@ -28,7 +28,6 @@ public class GetViews {
                 int sum;
                 int previewsValue;
                 sum = 0;
-                previewsValue = 0;
                 if (user.getHistory().containsKey(movie.getTitle())) {
                     sum += user.getHistory().get(movie.getTitle());
                 }
@@ -49,7 +48,6 @@ public class GetViews {
                 int sum;
                 int previewsValue;
                 sum = 0;
-                previewsValue = 0;
                 if (user.getHistory().containsKey(serial.getTitle())) {
                     sum += user.getHistory().get(serial.getTitle());
                 }

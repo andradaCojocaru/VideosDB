@@ -35,8 +35,8 @@ public class SortVideo {
      *
      */
     public void sortSearch() {
-        cmp = (o2, o1) -> Double.compare(o1.getRating(), o2.getRating());
-        cmp = cmp.thenComparing((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
+        cmp = (o1, o2) -> o1.getTitle().compareTo(o2.getTitle());
+        cmp = cmp.thenComparing((o2, o1) -> Double.compare(o1.getRating(), o2.getRating()));
     }
 
     /**

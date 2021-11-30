@@ -46,15 +46,12 @@ public class RatingVideo {
                     n += 1;
                 }
                 if (n != 0) {
-                    if (serial.getRatings() != null) {
-                        ratings = serial.getRatings();
-                    }
                     ratings.add(sum / n);
                 } else {
                     ratings.add(0.0);
                 }
-                serial.setRatings(ratings);
             }
+            serial.setRatings(ratings);
 
             double sum;
             sum = 0;

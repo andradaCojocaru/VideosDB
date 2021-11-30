@@ -1,5 +1,8 @@
 package main.Commands;
 
+import main.Entities.MyMovie;
+import main.Entities.MySerial;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -42,16 +45,39 @@ public class Favorite {
      * @return
      */
     public String getMessage(final ArrayList<String> favorites,
-                             final String movie) {
+                             final MyMovie movie) {
         if (success == 0) {
             if (notFavorite == 0) {
-                favorites.add(movie);
-                return "success -> " + movie + " was added as favourite";
+                favorites.add(movie.getTitle());
+                int nr = movie.getNumberOfFavorites();
+                movie.setNumberOfFavorites(nr + 1);
+                return "success -> " + movie.getTitle() + " was added as favourite";
             } else {
-                return "error -> " + movie + " is already in favourite list";
+                return "error -> " + movie.getTitle() + " is already in favourite list";
             }
         } else {
-            return "error -> " + movie + " is not seen";
+            return "error -> " + movie.getTitle() + " is not seen";
+        }
+    }
+
+    /**
+     * @param favorites
+     * @param serial
+     * @return
+     */
+    public String getMessage(final ArrayList<String> favorites,
+                             final MySerial serial) {
+        if (success == 0) {
+            if (notFavorite == 0) {
+                favorites.add(serial.getTitle());
+                int nr = serial.getNumberOfFavorites();
+                serial.setNumberOfFavorites(nr + 1);
+                return "success -> " + serial.getTitle() + " was added as favourite";
+            } else {
+                return "error -> " + serial.getTitle() + " is already in favourite list";
+            }
+        } else {
+            return "error -> " + serial.getTitle() + " is not seen";
         }
     }
 

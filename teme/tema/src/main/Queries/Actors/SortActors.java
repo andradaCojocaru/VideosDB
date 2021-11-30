@@ -63,14 +63,15 @@ public class SortActors {
      * @param number
      * @return
      */
-    public String mySort(final ArrayList<MyActor> actors, int number) {
+    public String mySort(final ArrayList<MyActor> actors, final int number) {
         ArrayList<String> names = new ArrayList<>();
 
         actors.sort(cmp);
+        int i = number;
         for (MyActor actor : actors) {
-            if (number != 0) {
+            if (i != 0) {
                 names.add(actor.getName());
-                number -= 1;
+                i -= 1;
             } else {
                 break;
             }

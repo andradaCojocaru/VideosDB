@@ -74,14 +74,15 @@ public class SortSerial {
      * @param number
      * @return
      */
-    public String mySort(final ArrayList<MySerial> serials, int number) {
+    public String mySort(final ArrayList<MySerial> serials, final int number) {
         ArrayList<String> names = new ArrayList<>();
 
         serials.sort(cmp);
+        int i = number;
         for (MySerial serial : serials) {
-            if (number != 0) {
+            if (i != 0) {
                 names.add(serial.getTitle());
-                number -= 1;
+                i -= 1;
             } else {
                 break;
             }

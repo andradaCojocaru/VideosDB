@@ -74,14 +74,15 @@ public class SortMovie {
      * @param number
      * @return
      */
-    public String mySort(final ArrayList<MyMovie> movies, int number) {
+    public String mySort(final ArrayList<MyMovie> movies, final int number) {
         ArrayList<String> names = new ArrayList<>();
 
         movies.sort(cmp);
+        int i = number;
         for (MyMovie movie : movies) {
-            if (number != 0) {
+            if (i != 0) {
                 names.add(movie.getTitle());
-                number -= 1;
+                i -= 1;
             } else {
                 break;
             }
