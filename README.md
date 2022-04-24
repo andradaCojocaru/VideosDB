@@ -1,5 +1,5 @@
 # VideosDB
-# 322CA Andrada-Ioana Cojocaru
+# Andrada-Ioana Cojocaru
 
 In implementare am ales sa copiez entitatile in alte entitati la care am mai
 adaugat diverse campuri:
